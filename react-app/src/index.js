@@ -115,3 +115,6 @@ console.log(combined);
 
 const student = new Student("Kevin",22);
 console.log(student);
+
+const teacher = new Teacher('wenkai','phd');
+teacher.teach();
