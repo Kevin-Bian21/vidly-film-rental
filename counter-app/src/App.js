@@ -23,6 +23,13 @@ class App extends Component {
       counters[index].value ++;
       this.setState({ counters });
   };
+  handleDecrement = (counter) => {
+    const counters = [...this.state.counters];
+    let index = counters.indexOf(counter);
+    counters[index] = {...counter};
+    counters[index].value --;
+    this.setState({ counters });
+  };
   handleReset = () => {
       //使用map将state中的每个counter对象进行映射，并重置它的value值为0，这样旧的到了一个新的数组
       const counters = this.state.counters.map(c => {
@@ -41,6 +48,7 @@ class App extends Component {
               onDelete = {this.handleDelete}
               onReset = {this.handleReset}
               onIncrement = {this.handleIncrement}
+              onDecrement = {this.handleDecrement}
             />
           </main>
       </div>

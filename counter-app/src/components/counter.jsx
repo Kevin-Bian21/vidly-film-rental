@@ -18,16 +18,22 @@ class Counter extends Component {
 
   render() {
     return (
-      <div>
-        <span style={{ fontSize: 15 }} className={this.getBadgeClasses()}>
-          {this.props.counter.value}
-        </span>
-        <button
-          onClick={() => this.props.onIncrement(this.props.counter)}
-          className="btn btn-secondary btn-sm">增加</button>
-        <button
-          onClick={() => this.props.onDelete(this.props.counter.id)}
-          className="btn btn-danger btn-sm m-2">删除</button>
+      <div className="row">
+        <div className="col">
+          <span style={{ fontSize: 15 }} className={this.getBadgeClasses()}>
+            {this.props.counter.value}
+          </span>
+          <button
+            onClick={() => this.props.onIncrement(this.props.counter)}
+            className="btn btn-secondary btn-sm ">+</button>
+          <button
+            onClick={() => this.props.onDecrement(this.props.counter)}
+            className="btn btn-secondary btn-sm m-2"
+            disabled={this.props.counter.value > 0 ? "" : 'disabled'}>-</button>
+          <button
+            onClick={() => this.props.onDelete(this.props.counter.id)}
+            className="btn btn-danger btn-sm m-2">删除</button>
+        </div>
       </div>
     );
   }
