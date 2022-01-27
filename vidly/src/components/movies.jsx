@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { getMovies } from '../services/fakeMovieService';
 import Like from './common/Like';
 import Pagination from './common/Pagination';
+import  { paginate }  from './utils/paginate';
 
 class Movies extends Component {
     state = {
@@ -24,9 +25,9 @@ class Movies extends Component {
         this.setState({ movies })
     };
 
-    handlePageChange = (currentPage) => {
-        this.setState({currentPage})
-    }
+    handlePageChange = (page) => {
+        this.setState({currentPage : page});
+    };
     render() {
 
         const { length : count } = this.state.movies;
@@ -34,6 +35,8 @@ class Movies extends Component {
 
         if(count === 0)
             return <p>数据库中没有电影</p>;
+
+        const movies = paginate(this.state.movies, currentPage, pageSize); //调用分页算法
 
         return (
             <React.Fragment>
@@ -50,7 +53,7 @@ class Movies extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.movies.map(movie => (
+                        {movies.map(movie => (
                             <tr key={movie._id}>
                                 <td>{movie.title}</td>
                                 <td>{movie.genre.name}</td>
