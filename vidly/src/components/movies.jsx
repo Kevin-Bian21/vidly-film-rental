@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { getMovies } from '../services/fakeMovieService';
 import Like from './common/Like';
+import Pagination from './common/Pagination';
 
 class Movies extends Component {
     state = {
-        movies : getMovies()
+        movies : getMovies(),
+        pageSize : 5,
+        currentPage : 1
     };
 
     handleDelete = (movie) => {
@@ -21,9 +24,13 @@ class Movies extends Component {
         this.setState({ movies })
     };
 
+    handlePageChange = (currentPage) => {
+        this.setState({currentPage})
+    }
     render() {
 
         const { length : count } = this.state.movies;
+        const { pageSize, currentPage } = this.state;
 
         if(count === 0)
             return <p>数据库中没有电影</p>;
@@ -59,6 +66,12 @@ class Movies extends Component {
                         ))}
                     </tbody>
                 </table>
+                <Pagination
+                    itemsCount={count}
+                    pageSize={pageSize}
+                    currentPage={currentPage}
+                    onPageChange={this.handlePageChange}
+                />
             </React.Fragment>
         )}
 }
