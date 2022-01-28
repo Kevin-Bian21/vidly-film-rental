@@ -9,11 +9,15 @@ import  { paginate }  from './utils/paginate';
 
 class Movies extends Component {
     state = {
-        movies : getMovies(),
+        movies : [],  //先使用空数组，防止产生undefined异常，当DOM渲染完毕后，调用componentDidMount来进行赋值
         pageSize : 5,
         currentPage : 1,
-        genre : getGenres(),
+        genres : [],
     };
+
+    componentDidMount() {
+        this.setState( {movies : getMovies(), genres : getGenres() } );
+    }
 
     handleDelete = (movie) => {
         console.log(movie);
@@ -33,29 +37,32 @@ class Movies extends Component {
         this.setState({currentPage : page});
     };
 
-    handleGenreSelect = (item) => {
-        console.log(item);
+    handleGenreSelect = (genre) => {
+        this.setState({ selectedGenre : genre});
     }
     render() {
 
         const { length : count } = this.state.movies;
-        const { pageSize, currentPage } = this.state;
+        const { pageSize, currentPage, selectedGenre, movies : allMovies} = this.state;
 
         if(count === 0)
             return <p>数据库中没有电影</p>;
 
-        const movies = paginate(this.state.movies, currentPage, pageSize); //调用分页算法
+        const filtered = selectedGenre ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies; //筛选出同一分组的电影
+
+        const movies = paginate(filtered, currentPage, pageSize); //调用分页算法
 
         return (
             <div className='row'>
                 <div className='col-2'>
                     <ListGroup
-                        items={this.state.genre}
+                        items={this.state.genres}
+                        selectedItem={this.state.selectedGenre}
                         onItemSelect = {this.handleGenreSelect}
                     />
                 </div>
                 <div className='col-5'>
-                    <p>数据库中有{count}部电影</p>
+                    <p>数据库中有{filtered.length}部电影</p>
                     <table className="table">
                         <thead>
                             <tr>
@@ -85,7 +92,7 @@ class Movies extends Component {
                         </tbody>
                     </table>
                     <Pagination
-                        itemsCount={count}
+                        itemsCount={filtered.length}
                         pageSize={pageSize}
                         currentPage={currentPage}
                         onPageChange={this.handlePageChange}
