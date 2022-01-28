@@ -1,6 +1,6 @@
 import { get } from 'lodash';
 import React, { Component } from 'react';
-import { getGenres } from '../services/fakeGenreService';
+import { genres, getGenres } from '../services/fakeGenreService';
 import { getMovies } from '../services/fakeMovieService';
 import Like from './common/Like';
 import ListGroup from './common/ListGroup';
@@ -16,7 +16,8 @@ class Movies extends Component {
     };
 
     componentDidMount() {
-        this.setState( {movies : getMovies(), genres : getGenres() } );
+        const genres = [{name : "All genre"}, ...getGenres()];  //在得到的genres中再添加一项all genre
+        this.setState( {movies : getMovies(), genres : genres } );
     }
 
     handleDelete = (movie) => {
@@ -38,8 +39,9 @@ class Movies extends Component {
     };
 
     handleGenreSelect = (genre) => {
-        this.setState({ selectedGenre : genre});
-    }
+        this.setState({ selectedGenre : genre, currentPage : 1});
+    };
+
     render() {
 
         const { length : count } = this.state.movies;
@@ -48,7 +50,7 @@ class Movies extends Component {
         if(count === 0)
             return <p>数据库中没有电影</p>;
 
-        const filtered = selectedGenre ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies; //筛选出同一分组的电影
+        const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies; //筛选出同一分组的电影
 
         const movies = paginate(filtered, currentPage, pageSize); //调用分页算法
 
