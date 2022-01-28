@@ -5,6 +5,7 @@ import { getMovies } from '../services/fakeMovieService';
 import Like from './common/Like';
 import ListGroup from './common/ListGroup';
 import Pagination from './common/Pagination';
+import MoviesTable from './moviesTable';
 import  { paginate }  from './utils/paginate';
 
 class Movies extends Component {
@@ -65,34 +66,11 @@ class Movies extends Component {
                 </div>
                 <div className='col-5'>
                     <p>数据库中有{filtered.length}部电影</p>
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Genre</th>
-                                <th>Stock</th>
-                                <th>Rate</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {movies.map(movie => (
-                                <tr key={movie._id}>
-                                    <td>{movie.title}</td>
-                                    <td>{movie.genre.name}</td>
-                                    <td>{movie.numberInStock}</td>
-                                    <td>{movie.dailyRentalRate}</td>
-                                    <td>
-                                        <Like liked = {movie.liked} onClick={() => this.handleLike(movie)} />
-                                    </td>
-                                    <td>
-                                        <button onClick={() => this.handleDelete(movie)} className='btn btn-danger btn-sm'>删除</button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    <MoviesTable
+                        movies = {movies}
+                        onDelete = {this.handleDelete}
+                        onLike = {this.handleLike}
+                    />
                     <Pagination
                         itemsCount={filtered.length}
                         pageSize={pageSize}
