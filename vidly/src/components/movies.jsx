@@ -7,6 +7,7 @@ import ListGroup from './common/ListGroup';
 import Pagination from './common/Pagination';
 import MoviesTable from './moviesTable';
 import  { paginate }  from './utils/paginate';
+import lodash from "lodash";
 
 class Movies extends Component {
     state = {
@@ -14,10 +15,11 @@ class Movies extends Component {
         pageSize : 5,
         currentPage : 1,
         genres : [],
+        sortColumn : {path : 'title', order : 'asc'}
     };
 
     componentDidMount() {
-        const genres = [{name : "All genre"}, ...getGenres()];  //在得到的genres中再添加一项all genre
+        const genres = [{ _id : "",name : "All genre"}, ...getGenres()];  //在得到的genres中再添加一项all genre
         this.setState( {movies : getMovies(), genres : genres } );
     }
 
@@ -43,17 +45,22 @@ class Movies extends Component {
         this.setState({ selectedGenre : genre, currentPage : 1});
     };
 
+    handleSort = (path) => {
+        this.setState( { sortColumn : {path : path, order : 'asc'}} );
+    }
     render() {
 
         const { length : count } = this.state.movies;
-        const { pageSize, currentPage, selectedGenre, movies : allMovies} = this.state;
+        const { pageSize, currentPage, selectedGenre, movies : allMovies, sortColumn} = this.state;
 
         if(count === 0)
             return <p>数据库中没有电影</p>;
 
         const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies; //筛选出同一分组的电影
 
-        const movies = paginate(filtered, currentPage, pageSize); //调用分页算法
+        const sorted = lodash.orderBy(filtered, [sortColumn.path], [sortColumn.order]); //排序
+
+        const movies = paginate(sorted, currentPage, pageSize); //调用分页算法
 
         return (
             <div className='row'>
@@ -70,6 +77,7 @@ class Movies extends Component {
                         movies = {movies}
                         onDelete = {this.handleDelete}
                         onLike = {this.handleLike}
+                        onSort = {this.handleSort}
                     />
                     <Pagination
                         itemsCount={filtered.length}
