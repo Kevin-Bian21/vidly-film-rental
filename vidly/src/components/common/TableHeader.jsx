@@ -14,12 +14,28 @@ import React, { Component } from 'react';
         this.props.onSort(sortColumn);
     };
 
+    //给当前排序的列渲染排序图标
+    renderSortIcon = (column) => {
+        if (column.path !== this.props.sortColumn.path)
+            return null;
+        if (this.props.sortColumn.order === 'asc')
+            return <i className="fa fa-sort-asc"></i>;
+        return <i className="fa fa-sort-desc"></i>
+    }
+
     render() {
          return (
             <thead>
                 <tr>
                     {this.props.columns.map(column => (
-                        <th key={column.path || column.key} onClick={() => this.raiseSort(column.path) }>{ column.label }</th>
+                        <th
+                            className='clickable'
+                            key={column.path || column.key}
+                            onClick={() => this.raiseSort(column.path) }
+                        >
+                            { column.label }
+                            { this.renderSortIcon(column) }
+                        </th>
                     ))}
                 </tr>
             </thead>

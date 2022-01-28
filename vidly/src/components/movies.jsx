@@ -71,7 +71,7 @@ class Movies extends Component {
                         onItemSelect = {this.handleGenreSelect}
                     />
                 </div>
-                <div className='col-5'>
+                <div className='col-8'>
                     <p>数据库中有{filtered.length}部电影</p>
                     <MoviesTable
                         movies = {movies}
