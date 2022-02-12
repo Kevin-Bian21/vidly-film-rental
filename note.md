@@ -14,17 +14,19 @@
 3. jsx只能渲染一个顶层元素，如果有多个元素，那么这些元素必须有一个父元素，所以可以将其放入一个<div>中或者<React.fragment>中。
 
 ## 组合组件
-1. 组件间传递数据 - Pass Data
+1. 组件间传递数据 - Use Props Pass Data
 2. 发起并处理事件 - Raise and Handle Events
-3. 多组件保持同步 - Multiple Components in Sync
+3. 多组件保持同步 - Multiple Components in Sync （上移state）
 4. 功能性组件 - Functional Components
 5. 生命周期钩子 - Lifecycle Hooks
     钩住某个特定的时刻，在整个生命周期中，做一些事情
     ![](https://gitee.com/Kevin_Bian/img_bed/raw/master/img/生命周期钩子.png)
-    1. mounting(装载)阶段：有三个生命周期钩子：Counstructor、Render 和 ComponentDidMount。
+    1. mounting(装载)阶段：有三个生命周期钩子：Counstructor、Render 和 ComponentDidMount。(ComponentDidMount是在所有DoM渲染完后调用)
     2. update(更新)阶段：当更新state时，会触发对Render()的调用,此时会更新该组件及其子组件。 `componentDidUpdate(prevProps,prevStates);`
     3. unmount(卸载)阶段：react会将新旧DOM进行比对，然后再将组件移出DOM之前会调用componentWillUNmount方法
 
     不能再无 state 函数组件中使用生命周期钩子。
 
-如果想传递一个复杂的组件，比如对话框，则尽量使用props中的children属性
+  如果想传递一个复杂的组件，比如对话框，则尽量使用props中的children属性
+
+类型检测库：prop-types
