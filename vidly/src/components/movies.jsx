@@ -48,19 +48,28 @@ class Movies extends Component {
     handleSort = (sortColumn) => {
         this.setState( { sortColumn } );
     }
-    render() {
 
-        const { length : count } = this.state.movies;
+    getPageData = () => {
         const { pageSize, currentPage, selectedGenre, movies : allMovies, sortColumn} = this.state;
-
-        if(count === 0)
-            return <p>数据库中没有电影</p>;
 
         const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies; //筛选出同一分组的电影
 
         const sorted = lodash.orderBy(filtered, [sortColumn.path], [sortColumn.order]); //排序
 
         const movies = paginate(sorted, currentPage, pageSize); //调用分页算法
+
+        return {totalCount : filtered.length, movies};
+    }
+
+    render() {
+
+        const { length : count } = this.state.movies;
+        const { pageSize, currentPage, sortColumn} = this.state;
+
+        if(count === 0)
+            return <p>数据库中没有电影</p>;
+
+        const {totalCount, movies : movies } = this.getPageData();
 
         return (
             <div className='row'>
@@ -72,7 +81,7 @@ class Movies extends Component {
                     />
                 </div>
                 <div className='col-8'>
-                    <p>数据库中有{filtered.length}部电影</p>
+                    <p>数据库中有{ totalCount }部电影</p>
                     <MoviesTable
                         movies = {movies}
                         sortColumn = {sortColumn}
@@ -81,7 +90,7 @@ class Movies extends Component {
                         onSort = {this.handleSort}
                     />
                     <Pagination
-                        itemsCount={filtered.length}
+                        itemsCount={ totalCount }
                         pageSize={pageSize}
                         currentPage={currentPage}
                         onPageChange={this.handlePageChange}
