@@ -8,6 +8,7 @@ import Pagination from './common/Pagination';
 import MoviesTable from './moviesTable';
 import  { paginate }  from './utils/paginate';
 import lodash from "lodash";
+import { Outlet } from "react-router-dom";
 
 class Movies extends Component {
     state = {
@@ -96,6 +97,7 @@ class Movies extends Component {
                         onPageChange={this.handlePageChange}
                     />
                 </div>
+                <Outlet />
             </div>
         )}
 }

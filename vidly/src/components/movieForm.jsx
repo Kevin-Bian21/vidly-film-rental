@@ -1,9 +1,12 @@
 import React from "react";
+import { useParams } from 'react-router-dom';
 
-const MovieForm = ({ match, history }) => {
+const MovieForm = ( history ) => {
+  let params = useParams();
+  console.log(params.id, history);
   return (
     <div>
-      <h1>Movie Form {match.params.id} </h1>
+      <h1>Movie Form {params.id} </h1>
       <button
         className="btn btn-primary"
         onClick={() => history.push("/movies")}
