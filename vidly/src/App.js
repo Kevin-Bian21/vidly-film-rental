@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import './App.css';
 import Movies from './components/movies';
 import Customers from './components/customers';
 import NotFound from './components/notFound';
 import Rentals from './components/rentals';
+import Login from './components/common/Login';
 import MovieForm from './components/movieForm';
 import NavBar from './components/navBar';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import './App.css';
 
 class App extends Component {
   render() {
@@ -15,6 +16,7 @@ class App extends Component {
         <NavBar />
         <main className='container'>
           <Routes>
+            <Route path='login' element={<Login />}></Route>
             <Route path="movies" element={<Movies />} >
               <Route path=":id" element={<MovieForm />} />
             </Route>
