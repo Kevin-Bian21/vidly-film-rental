@@ -3,11 +3,11 @@ import Movies from './components/movies';
 import Customers from './components/customers';
 import NotFound from './components/notFound';
 import Rentals from './components/rentals';
-import Login from './components/common/Login';
+import Login from './components/Login';
 import MovieForm from './components/movieForm';
 import NavBar from './components/navBar';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import Register from './components/common/Register';
+import Register from './components/Register';
 import './App.css';
 
 class App extends Component {
