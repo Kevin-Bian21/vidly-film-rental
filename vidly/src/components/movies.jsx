@@ -1,14 +1,13 @@
-import { get } from 'lodash';
 import React, { Component } from 'react';
-import { genres, getGenres } from '../services/fakeGenreService';
-import { getMovies } from '../services/fakeMovieService';
-import Like from './common/Like';
+import { getGenres } from '../services/fakeGenreService';
+import { getMovies, deleteMovie } from '../services/fakeMovieService';
 import ListGroup from './common/ListGroup';
 import Pagination from './common/Pagination';
 import MoviesTable from './moviesTable';
 import  { paginate }  from './utils/paginate';
 import lodash from "lodash";
-import { Outlet } from "react-router-dom";
+import { Outlet, NavLink } from "react-router-dom";
+import SearchBox from "./searchBox";
 
 class Movies extends Component {
     state = {
@@ -16,7 +15,9 @@ class Movies extends Component {
         pageSize : 5,
         currentPage : 1,
         genres : [],
-        sortColumn : {path : 'title', order : 'asc'}
+        sortColumn : {path : 'title', order : 'asc'},
+        searchQuery: "",
+        selectedGenre: null
     };
 
     componentDidMount() {
@@ -27,7 +28,9 @@ class Movies extends Component {
     handleDelete = (movie) => {
         console.log(movie);
         const movies = this.state.movies.filter(m => m._id !== movie._id);  //将传入的movie的id和movies中的id不相同的movie重新选出赋值给state中的movies
-        this.setState({ movies : movies})
+        this.setState({ movies : movies});
+
+        deleteMovie(movie._id);
     };
 
     handleLike = (movie) => {
@@ -43,7 +46,11 @@ class Movies extends Component {
     };
 
     handleGenreSelect = (genre) => {
-        this.setState({ selectedGenre : genre, currentPage : 1});
+        this.setState({ selectedGenre: genre, searchQuery: "", currentPage: 1 });
+    };
+
+    handleSearch = query => {
+        this.setState({ searchQuery: query, selectedGenre: null, currentPage: 1 });
     };
 
     handleSort = (sortColumn) => {
@@ -51,9 +58,13 @@ class Movies extends Component {
     }
 
     getPageData = () => {
-        const { pageSize, currentPage, selectedGenre, movies : allMovies, sortColumn} = this.state;
+        const { pageSize, currentPage, selectedGenre, movies : allMovies, sortColumn, searchQuery,} = this.state;
 
-        const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies; //筛选出同一分组的电影
+        let filtered = allMovies;
+        if (searchQuery)
+          filtered = allMovies.filter(m => m.title.toLowerCase().startsWith(searchQuery.toLowerCase()));
+        else if (selectedGenre && selectedGenre._id)
+          filtered = allMovies.filter(m => m.genre._id === selectedGenre._id);
 
         const sorted = lodash.orderBy(filtered, [sortColumn.path], [sortColumn.order]); //排序
 
@@ -65,7 +76,7 @@ class Movies extends Component {
     render() {
 
         const { length : count } = this.state.movies;
-        const { pageSize, currentPage, sortColumn} = this.state;
+        const { pageSize, currentPage, sortColumn, searchQuery} = this.state;
 
         if(count === 0)
             return <p>数据库中没有电影</p>;
@@ -82,7 +93,15 @@ class Movies extends Component {
                     />
                 </div>
                 <div className='col-8'>
+                <NavLink
+                    to="/movies/new"
+                    className="btn btn-primary"
+                    style={{ marginBottom: 20 }}
+                >
+                    New Movie
+                </NavLink>
                     <p>数据库中有{ totalCount }部电影</p>
+                    <SearchBox value={searchQuery} onChange={this.handleSearch} />
                     <MoviesTable
                         movies = {movies}
                         sortColumn = {sortColumn}

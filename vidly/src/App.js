@@ -19,7 +19,8 @@ class App extends Component {
           <Routes>
             <Route path='login' element={<Login />}></Route>
             <Route path='register' element={<Register />}></Route>
-            <Route path="movies" element={<Movies />} >
+            <Route path="movies" element={<Movies />} ></Route>
+            <Route path="movies"  >
               <Route path=":id" element={<MovieForm />} />
             </Route>
             <Route path="customers" element={<Customers/>}></Route>

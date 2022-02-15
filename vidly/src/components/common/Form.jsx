@@ -20,14 +20,14 @@ class Form extends Component {
   };
 
   validateProperty = ({ name, value }) => {
-    const obj = { [name]: value };
+    const obj = { [name]: value.trim() };
     const schema = { [name]: this.schema[name] };
     const { error } = Joi.validate(obj, schema);
     return error ? error.details[0].message : null;
   };
 
   handleSubmit = e => {
-    e.preventDefault();
+    e.preventDefault(); // 添加了一个阻止默认事件
 
     const errors = this.validate();
     this.setState({ errors: errors || {} });
