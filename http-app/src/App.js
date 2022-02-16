@@ -43,10 +43,15 @@ class App extends Component {
     try {
       axios.delete(apiEndpoint + '/' + post.id);
     } catch (e) {
-      alert("出错啦");
+      if (e.response && e.response.status === 404)
+        alert('This post has already benn deleted');
+      else {
+        console.log('Loging the error', e);
+        alert('未知错误发生')
+      }
+
       this.setState({ posts : originalPosts }); //回滚
     }
-
   };
 
   render() {
