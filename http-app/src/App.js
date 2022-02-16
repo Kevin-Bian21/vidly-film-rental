@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import http from './services/httpService';
 import config from './config.json';
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import "./App.css";
 
 class App extends Component {
@@ -32,14 +34,14 @@ class App extends Component {
   };
 
   //为了给用户良好的体验，采用先界面删除，在去服务器删除，如果后端请求出错，则可以回滚补救
-  handleDelete = post => {
+  handleDelete = async post => {
     const originalPosts = this.state.posts;
 
     const posts = this.state.posts.filter( p => p.id !== post.id);
     this.setState({ posts });
 
     try {
-      http.delete(config.apiEndpoint + '/' + post.id);
+      await http.delete(config.apiEndpoint + '/' + post.id);
     } catch (e) {
       if (e.response && e.response.status === 404)
         alert('This post has already benn deleted');
@@ -51,6 +53,7 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
+        <ToastContainer />
         <button className="btn btn-primary" onClick={this.handleAdd}>
           Add
         </button>
