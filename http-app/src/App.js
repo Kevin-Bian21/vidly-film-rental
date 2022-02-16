@@ -1,7 +1,16 @@
 import React, { Component } from "react";
 import axios from 'axios';
-
 import "./App.css";
+
+//使用axios拦截器处理未知的异常并将异常记录在日志中
+axios.interceptors.response.use(null, error => {
+  const expectedError = error.response && error.response.status >= 400 && error.response.status < 500;
+  if (! expectedError) {
+    console.log('Loging the error', e);
+    alert('未知错误发生');
+  }
+    return Promise.reject(error);
+});
 
 const apiEndpoint = 'http://jsonplaceholder.typicode.com/posts';
 
@@ -45,10 +54,6 @@ class App extends Component {
     } catch (e) {
       if (e.response && e.response.status === 404)
         alert('This post has already benn deleted');
-      else {
-        console.log('Loging the error', e);
-        alert('未知错误发生')
-      }
 
       this.setState({ posts : originalPosts }); //回滚
     }
