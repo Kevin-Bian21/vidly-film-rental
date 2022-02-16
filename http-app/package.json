@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@sentry/react": "^6.17.8",
+    "@sentry/tracing": "^6.17.8",
     "axios": "^0.26.0",
     "bootstrap": "^4.6.1",
+    "raven-js": "^3.27.2",
     "react": "^16.4.1",
     "react-dom": "^16.14.0",
     "react-scripts": "1.1.4",
