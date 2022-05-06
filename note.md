@@ -30,3 +30,28 @@
   如果想传递一个复杂的组件，比如对话框，则尽量使用props中的children属性
 
 类型检测库：prop-types
+
+
+## 路由
+1. 路由参数 - Route Parameters
+  React Router v6使用<Routes>替换<Switch>
+  嵌套路由需要在父布局路由中添加一个出口
+2. 查询字符串 - Quary String
+3. 用户重定向 - Redirect
+4. 404错误处理 - Not Found(404) Pages
+5. 路由嵌套 - Nested Routing
+
+ 使用 ref={ this.username } 来引用state中表单的内容
+ 然后使用钩子是输入框获取焦点
+  ```js
+  componentDidMount() {
+    this.username.current.focus();
+  }
+  ```
+等价于 autoFocus
+
+乐观与保守更新
+  //为了给用户良好的体验，采用先界面删除，在去服务器删除，如果后端请求出错，则可以回滚补救
+
+import { ToastContainer } from "react-toastify";
+![使用sentry记录异常](https://gitee.com/Kevin_Bian/img_bed/raw/master/img/React.png)
